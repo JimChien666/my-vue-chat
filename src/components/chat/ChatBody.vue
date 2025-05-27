@@ -12,7 +12,6 @@
         </div>
       </div>
 
-      <!-- AI 輸入中氣泡 -->
       <div v-if="isTyping" class="chat-message assistant">
         <div class="message-bubble assistant typing-bubble">
           <span class="dot"></span>
@@ -28,21 +27,31 @@
 export default {
   props: {
     messages: Array,
-    isTyping: Boolean, // 新增 prop 控制是否顯示正在輸入動畫
+    isTyping: Boolean,
+  },
+  watch: {
+    messages() {
+      this.$nextTick(() => {
+        const container = this.$el;
+        container.scrollTop = container.scrollHeight;
+      });
+    },
   },
 };
 </script>
 
 <style scoped>
 .chat-body {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  height: 400px;
   padding: 10px;
-  overflow-y: auto;
   font-size: 14px;
   box-sizing: border-box;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.chat-messages {
+  display: flex;
+  flex-direction: column;
 }
 
 .chat-message {
@@ -78,7 +87,6 @@ export default {
   border-bottom-left-radius: 2px;
 }
 
-/* 正在輸入動畫氣泡 */
 .typing-bubble {
   display: flex;
   align-items: center;
@@ -87,7 +95,6 @@ export default {
   padding: 8px 10px;
 }
 
-/* 三個跳動的點 */
 .dot {
   width: 6px;
   height: 6px;

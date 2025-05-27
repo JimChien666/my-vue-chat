@@ -1,7 +1,7 @@
 <template>
   <div class="chat-window">
     <ChatHeader @close="$emit('close')" />
-    <ChatBody :messages="messages" :isTyping="isTyping" />
+    <ChatBody class="chat-body-container" :messages="messages" :isTyping="isTyping" />
     <ChatFooter @send="$emit('send', $event)" />
   </div>
 </template>
@@ -34,5 +34,10 @@ export default {
   display: flex;
   flex-direction: column;
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.chat-body-container {
+  flex: 1;
+  overflow-y: auto;
 }
 </style>
