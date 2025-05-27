@@ -21,7 +21,7 @@ export default {
     return {
       showChat: false,
       messages: [],
-      isTyping: false,  // 新增 isTyping 狀態
+      isTyping: false,
     };
   },
   methods: {
@@ -30,16 +30,29 @@ export default {
     },
     async handleSend(userInput) {
       this.messages.push({ role: 'user', content: userInput });
-      this.isTyping = true;            // 開始打字動畫
+      this.isTyping = true;
 
-      const aiReply = await new Promise(resolve => {
-        setTimeout(() => {
-          resolve(`你說的是：「${userInput}」嗎？`);
-        }, 1000);  // 模擬 AI 回應時間
-      });
+      try {
+        const response = await fetch('http://localhost:8080/api/ask', {
+          method: 'POST', // 或改成 'POST'，視後端而定
+          headers: {
+             'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ message: userInput }), // 如果是POST
+        });
 
-      this.isTyping = false;           // 結束打字動畫
-      this.messages.push({ role: 'assistant', content: aiReply });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        this.messages.push({ role: 'assistant', content: data.msg });
+      } catch (error) {
+        console.error('Fetch error:', error);
+        this.messages.push({ role: 'assistant', content: '伺服器錯誤，請稍後再試' });
+      } finally {
+        this.isTyping = false;
+      }
     }
   }
 };
