@@ -1,7 +1,15 @@
 <template>
-  <ChatWidget />
+  <div id="app">
+    <ChatWidget />
+  </div>
 </template>
 
-<script setup>
-import ChatWidget from './components/ChatWidget.vue'
+<script>
+import ChatWidget from './components/chat/ChatWidget.vue';
+
+export default {
+  components: {
+    ChatWidget
+  }
+};
 </script>
